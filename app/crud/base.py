@@ -13,6 +13,13 @@ class BaseRepository(Generic[T]):
     def find_all(self) -> list[T]:
         return self._session.exec(select(self._model_class)).all()
     
+    def save_all(self, objs: list[T]) -> list[T]:
+        self._session.add_all(objs)
+        self._session.commit()
+        for obj in objs:
+            self._session.refresh(obj)
+        return objs
+    
     def save(self, obj: T) -> T:
         self._session.add(obj)
         self._session.commit()
