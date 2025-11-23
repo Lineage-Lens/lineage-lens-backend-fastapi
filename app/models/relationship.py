@@ -2,6 +2,7 @@ from datetime import date
 from enum import Enum
 from typing import List, TYPE_CHECKING
 
+from pydantic import computed_field
 from sqlmodel import Field, Relationship as R, SQLModel
 
 from .person_relationship_link import PersonRelationshipLink
@@ -20,3 +21,8 @@ class Relationship(SQLModel, table=True):
     start_date: date
 
     people: List["Person"] = R(back_populates="_relationships", link_model=PersonRelationshipLink)
+    
+    @computed_field
+    @property
+    def people_ids(self) -> List[int]:
+        return [person.id for person in self.people]
