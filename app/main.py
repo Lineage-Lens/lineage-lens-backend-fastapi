@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 from db import create_db_and_tables
-from routers import person
+from routers import person, relationship
 
 
 @asynccontextmanager
@@ -25,6 +25,7 @@ app.add_middleware(
 )
 
 app.include_router(person.router)
+app.include_router(relationship.router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=settings.port)
