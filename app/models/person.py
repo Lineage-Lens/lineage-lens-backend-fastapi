@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional, List
 
 from sqlmodel import Field, Relationship, SQLModel
@@ -7,6 +8,7 @@ class Person(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     first_name: str
     last_name: str
+    birthday: date
 
     father_id: int | None = Field(default=None, foreign_key="person.id")
     mother_id: int | None = Field(default=None, foreign_key="person.id")
