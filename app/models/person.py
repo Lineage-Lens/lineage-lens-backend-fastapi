@@ -1,14 +1,20 @@
 from datetime import date
+from enum import Enum
 from typing import Optional, List
 
 from sqlmodel import Field, Relationship, SQLModel
 
+
+class Gender(str, Enum):
+    MALE = "M"
+    FEMALE = "F"
 
 class Person(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     first_name: str
     last_name: str
     birthday: date
+    gender: Gender
 
     father_id: int | None = Field(default=None, foreign_key="person.id")
     mother_id: int | None = Field(default=None, foreign_key="person.id")
