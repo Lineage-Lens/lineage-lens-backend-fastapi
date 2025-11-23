@@ -1,9 +1,13 @@
 from datetime import date
 from enum import Enum
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 
 from pydantic import computed_field
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, Relationship as R, SQLModel
+
+from .person_relationship_link import PersonRelationshipLink
+if TYPE_CHECKING:
+    from .relationship import Relationship
 
 
 class Gender(str, Enum):
@@ -20,7 +24,7 @@ class Person(SQLModel, table=True):
     father_id: int | None = Field(default=None, foreign_key="person.id")
     mother_id: int | None = Field(default=None, foreign_key="person.id")
 
-    father: Optional["Person"] = Relationship(
+    father: Optional["Person"] = R(
         back_populates="children_as_father",
         sa_relationship_kwargs={
             "remote_side": "Person.id",
@@ -28,7 +32,7 @@ class Person(SQLModel, table=True):
         },
     )
 
-    mother: Optional["Person"] = Relationship(
+    mother: Optional["Person"] = R(
         back_populates="children_as_mother",
         sa_relationship_kwargs={
             "remote_side": "Person.id",
@@ -36,12 +40,12 @@ class Person(SQLModel, table=True):
         },
     )
 
-    children_as_father: List["Person"] = Relationship(
+    children_as_father: List["Person"] = R(
         back_populates="father",
         sa_relationship_kwargs={"foreign_keys": "[Person.father_id]"},
     )
 
-    children_as_mother: List["Person"] = Relationship(
+    children_as_mother: List["Person"] = R(
         back_populates="mother",
         sa_relationship_kwargs={"foreign_keys": "[Person.mother_id]"},
     )
@@ -54,3 +58,10 @@ class Person(SQLModel, table=True):
     @property
     def children_ids(self) -> List[int]:
         return [child.id for child in self.children]
+    
+    _relationships: List["Relationship"] = R(back_populates="people", link_model=PersonRelationshipLink)
+    
+    @computed_field
+    @property
+    def relationships(self) -> List["Relationship"]:
+        return self._relationships
