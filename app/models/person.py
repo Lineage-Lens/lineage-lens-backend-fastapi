@@ -2,6 +2,7 @@ from datetime import date
 from enum import Enum
 from typing import Optional, List
 
+from pydantic import computed_field
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -44,3 +45,12 @@ class Person(SQLModel, table=True):
         back_populates="mother",
         sa_relationship_kwargs={"foreign_keys": "[Person.mother_id]"},
     )
+
+    @property
+    def children(self) -> List["Person"]:
+        return (self.children_as_father or []) + (self.children_as_mother or [])
+
+    @computed_field
+    @property
+    def children_ids(self) -> List[int]:
+        return [child.id for child in self.children]
