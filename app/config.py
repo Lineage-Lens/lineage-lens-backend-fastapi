@@ -6,6 +6,8 @@ class Settings(BaseSettings):
 
     allowed_origins: list[str]
 
+    google_oauth2_client_id: str
+
     database_username: str
     database_password: str
     database_name: str
