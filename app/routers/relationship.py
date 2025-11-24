@@ -16,7 +16,7 @@ class CreateRelationship(BaseModel):
 
     people: list[int]
 
-@router.post("/")
+@router.post("")
 async def create(create_relationship: CreateRelationship):
     relationship = Relationship(
         relationship_type=create_relationship.relationship_type,
