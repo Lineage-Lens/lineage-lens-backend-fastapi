@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 from db import create_db_and_tables
+from middleware.auth import AuthMiddleware
 from routers import person, relationship
 
 
@@ -22,6 +23,10 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
+)
+app.add_middleware(
+    AuthMiddleware,
+    client_id=settings.google_oauth2_client_id
 )
 
 app.include_router(person.router)
