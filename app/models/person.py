@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 
 class Gender(str, Enum):
-    MALE = "M"
-    FEMALE = "F"
+    MALE = "Male"
+    FEMALE = "Female"
 
 class Person(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
