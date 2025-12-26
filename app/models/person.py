@@ -18,7 +18,7 @@ class Person(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     first_name: str
     last_name: str
-    birthday: date
+    birth_date: date
     gender: Gender
 
     father_id: int | None = Field(default=None, foreign_key="person.id")
