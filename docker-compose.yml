@@ -11,6 +11,20 @@ services:
       - mysql_data:/var/lib/mysql
     ports:
       - "${DATABASE_PORT}:3306"
+  backend:
+    build: .
+    environment:
+      PORT: ${PORT}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+      GOOGLE_OAUTH2_CLIENT_ID: ${GOOGLE_OAUTH2_CLIENT_ID}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_HOST: database
+      DATABASE_PORT: 3306
+    ports:
+      - "${PORT}:${PORT}"
 
 volumes:
   mysql_data:
